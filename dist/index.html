@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="./style.css"/>
+    <title>Register</title>
+</head>
+<body class=""> 
+
+    <div id="container"></div>
+    <div id="result" class="text-blue-700 lg:mt-4"></div>
+
+    <section class="flex flex-col justify-center items-center mt-10 gap-5 bg-[#286fe0] lg:mx-96 lg:py-16">
+        <h2 class="text-white text-3xl font-bold">Register</h2>
+        <form class="lg:flex flex-col gap-1 pt-5">
+            <div id="firstname">
+                <label for="firstname-input"><i class='bx bx-user text-[#bcceeb]'></i></label>
+                <input type="text" name="firstname" id="firstname-input" placeholder="first-name" class="border-white border-2 rounded-sm" />
+            </div>
+            <div id="email">
+                <label for="email-input"><i class='bx bxl-gmail text-[#bcceeb]'></i></label>
+                <input type="email" name="email" id="email-input" placeholder="email" class="border-2 border-white rounded-sm lowercase" />
+            </div>
+            <div id="password">
+                <label for="password-input"><i class='bx bxs-lock text-[#bcceeb]'></i></label>
+                <input type="password" name="password" id="password-input" placeholder="password" class="border-white border-2 rounded-sm" />
+            </div>
+            <div id="number">
+                <label for="number-input"><i class='bx bx-phone text-[#bcceeb]'></i></label>
+                <input type="number" name="phone" id="number-input" placeholder="phone-number" class="border-white border-2 rounded-sm" />
+            </div>
+            <div id="date">
+                <label for="date-input"><i class='bx bx-calendar text-[#bcceeb]'></i></label>
+                <input type="date" name="date" id="date-input" placeholder="date" class="border-white border-2 rounded-sm" />
+            </div>
+            <button type="submit" class="bg-blue-700 border-2 text-white border-white w-20 rounded-xl font-bold mt-4 ml-24">Signup</button>
+        </form>
+    </section>
+
+    <script>
+        let form = document.querySelector('form');
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            // Remove previous error messages
+            let spans = document.querySelectorAll('span');
+            spans.forEach((span) => span.remove());
+
+            let isValid = true;
+
+            let fullname = document.querySelector('input[type=text]').value;
+            let email = document.querySelector('input[type=email]').value;
+            let password = document.querySelector('input[type=password]').value;
+            let phoneNumber = document.querySelector('input[type=number]').value;
+            let dateOfBirth = document.querySelector('input[type=date]').value;
+
+            // Validate Fullname
+            if (!fullname) {
+                isValid = false;
+                let span = document.createElement('span');
+                span.classList.add('text-red-500', 'text-sm', 'mt-1');
+                span.innerText = 'Fullname cannot be empty';
+                document.getElementById('firstname').appendChild(span);
+            }
+
+            // Validate Email
+            if (!email) {
+                isValid = false;
+                let span = document.createElement('span');
+                span.classList.add('text-red-500', 'text-sm', 'mt-1');
+                span.innerText = 'Email cannot be empty';
+                document.getElementById('email').appendChild(span);
+            }
+
+            // Validate Password
+            if (!password) {
+                isValid = false;
+                let span = document.createElement('span');
+                span.classList.add('text-red-500', 'text-sm', 'mt-1');
+                span.innerText = 'Password cannot be empty';
+                document.getElementById('password').appendChild(span);
+            } else if (password.length < 8) {
+                isValid = false;
+                let span = document.createElement('span');
+                span.classList.add('text-red-500', 'text-sm', 'mt-1');
+                span.innerText = 'Password cannot be less than 8 characters';
+                document.getElementById('password').appendChild(span);
+            }
+            // Validate phone number
+            if (!phoneNumber) {
+                isValid = false;
+                let span = document.createElement('span');
+                span.classList.add('text-red-500', 'text-sm', 'mt-1');
+                span.innerText = 'phone-number cannot be empty';
+                document.getElementById('number').appendChild(span);
+            }
+            // Validate Date of Birth
+            if (!dateOfBirth) {
+                isValid = false;
+                let span = document.createElement('span');
+                span.classList.add('text-red-500', 'text-sm', 'mt-1');
+                span.innerText = 'Date of birth cannot be empty';
+                document.getElementById('date').appendChild(span);
+            } else {
+                let dob = new Date(dateOfBirth);
+                let today = new Date();
+                let age = today.getFullYear() - dob.getFullYear();
+
+                if (today < new Date(today.getFullYear(), dob.getMonth(), dob.getDate())) {
+                    age--;
+                }
+
+                if (age < 18) {
+                    isValid = false;
+                    let span = document.createElement('span');
+                    span.classList.add('text-red-500', 'text-sm', 'mt-1');
+                    span.innerText = 'You must be at least 18';
+                    document.getElementById('date').appendChild(span);
+                }
+
+            }
+
+
+            // If form is valid, show submitted details
+            if (isValid) {
+                document.getElementById('result').innerHTML = `
+                    <h2 class="text-xl font-bold mt-4">Submitted details</h2>
+                    <ul class="list-disc pl-5">
+                        <li>Name: ${fullname}</li>
+                        <li>Email: ${email}</li>
+                        <li>Password: ${password}</li>
+                        <li>Phone: ${phoneNumber}</li>
+                        <li>DOB: ${dateOfBirth}</li>
+                    </ul>`;
+                form.reset();
+                document.getElementById('container').innerHTML = '';
+            } else {
+                document.getElementById('container').innerHTML = `<span style='color:#ff0000'>Please fill all fields correctly</span>`;
+                document.getElementById('result').innerHTML = '';
+            }
+        });
+    </script>
+</body>
+</html>
